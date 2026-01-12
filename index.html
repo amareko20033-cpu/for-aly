@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Coach Ali's training system </title>
+    <title>Coach Ali's training system</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap"
       rel="stylesheet"
@@ -67,7 +67,6 @@
 
       /* 1. Login Box */
       .login-box {
-        color: #ffffff33;
         text-align: center;
         background: var(--card-bg);
         padding: 40px;
@@ -75,17 +74,17 @@
         border: 1px solid rgba(255, 62, 62, 0.2);
         width: 90%;
         max-width: 400px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7),
-          0 0 20px rgba(255, 62, 62, 0.1);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
         animation: fadeInUp 0.8s ease-out;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       }
+
       .login-box:hover {
-        outline: none;
         border-color: var(--primary-color);
-        box-shadow: 0 0 15px rgba(255, 62, 62, 0.3);
-        transform: scale(1.02);
+        box-shadow: 0 0 25px rgba(255, 62, 62, 0.2);
+        transform: translateY(-5px);
       }
+
       input {
         padding: 15px;
         width: 100%;
@@ -117,24 +116,23 @@
       }
 
       .coach-card {
-        color: #ffffff52;
         background: rgba(22, 22, 22, 0.9);
         padding: 35px;
         border-radius: 20px;
-        border: 1px solid var(--primary-color);
+        border: 1px solid rgba(255, 62, 62, 0.3);
         width: 95%;
         max-width: 700px;
         text-align: center;
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
         animation: fadeInUp 0.6s ease-out;
-        transition: all 0.3s ease;
+        transition: all 0.4s ease;
       }
+
       .coach-card:hover {
-        outline: none;
         border-color: var(--primary-color);
-        box-shadow: 0 0 15px rgba(255, 62, 62, 0.3);
-        transform: scale(1.02);
+        transform: translateY(-5px);
       }
+
       /* 3. Cards Grid */
       .grid {
         display: grid;
@@ -158,7 +156,6 @@
         padding: 20px;
         animation: cardPop 0.5s ease-out backwards;
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        text-align: center;
       }
 
       .main-card:hover {
@@ -206,6 +203,39 @@
         justify-content: space-between;
         align-items: center;
         font-weight: bold;
+        transition: 0.3s;
+        cursor: pointer;
+      }
+      .exercise-item:hover {
+        background: #2a2a2a;
+        transform: scale(1.01);
+      }
+
+      /* 5. Exercise Details View */
+      .detail-card {
+        background: var(--card-bg);
+        padding: 25px;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 800px;
+        border: 1px solid var(--accent-gray);
+        text-align: right;
+        animation: fadeInUp 0.5s ease-out;
+      }
+
+      .video-container {
+        width: 100%;
+        margin: 20px 0;
+        border-radius: 15px;
+        overflow: hidden;
+        aspect-ratio: 16 / 9;
+        background: #000;
+      }
+
+      .video-container iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
       }
 
       /* Buttons */
@@ -236,10 +266,8 @@
         cursor: pointer;
         margin-bottom: 20px;
         align-self: flex-start;
-        font-family: "Cairo";
       }
 
-      /* --- Mobile Responsive --- */
       @media (max-width: 600px) {
         .grid {
           grid-template-columns: 1fr;
@@ -250,12 +278,6 @@
         .btn-action {
           width: 100%;
         }
-        .main-card {
-          min-height: 160px;
-        }
-      }
-      .Alis {
-        color: white;
       }
     </style>
   </head>
@@ -274,11 +296,10 @@
     <section id="coach-intro" class="page-section">
       <div class="coach-card">
         <h2 id="welcome-name" style="color: var(--primary-color)"></h2>
-        <h1 class="Alis">Coach Ali's file</h1>
+        <h1 style="color: white">Coach Ali's file</h1>
         <p>
           Training programs have been designed for you based on the principles
-          of physical strength and muscle hypertrophy. Choose your preferred
-          program.
+          of physical strength and muscle hypertrophy.
         </p>
         <p style="font-weight: 900; color: var(--primary-color)">
           "The difference between the impossible and the possible is willpower"
@@ -291,7 +312,7 @@
 
     <section id="splits-selection" class="page-section">
       <h1 style="color: var(--primary-color); text-align: center">
-      Choose a training system
+        Choose a training system
       </h1>
       <div class="grid">
         <div class="main-card" onclick="loadMuscles('pro')">
@@ -342,8 +363,24 @@
       </div>
     </section>
 
+    <section id="exercise-detail" class="page-section">
+      <div
+        style="
+          width: 100%;
+          max-width: 1100px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        "
+      >
+        <button class="back-btn" onclick="showSection('exercises-view')">
+          ← عودة للتمارين
+        </button>
+        <div id="exercise-info-content" class="detail-card"></div>
+      </div>
+    </section>
+
     <script>
-      // قاعدة البيانات
       const systems = {
         pro: {
           title: "نظام Pro Split",
@@ -358,15 +395,24 @@
       const exercisesDB = {
         صدر: [
           {
-            title: "صدر علوي",
+            title: "صدر علوي (Incline) (اختر واحد فقط في تمرينك)",
             items: [
-              "Incline Bench Press (4x8)",
-              "Incline Dumbbell Flyes (3x12)",
+              "Incline Dumbbell Chest Press",
+              "Incline cable Chest Press",
+              "Incline machine Chest Press",
             ],
           },
           {
-            title: "صدر سفلي",
-            items: ["Flat Bench Press (4x6)", "Chest Dips (3x12)"],
+            title: "صدر مستوي (Flat) (اختر واحد فقط في تمرينك)",
+            items: [
+              "Dumbbell Chest Press",
+              "cable Chest Press",
+              "machine Chest Press",
+            ],
+          },
+          {
+            title: "ألياف وسطى وعزل (تجميع) (اختر واحد فقط في تمرينك)",
+            items: ["cable Chest Fly", "Machine Chest Fly", "Dumbbell Chest Fly"],
           },
         ],
         ظهر: [
@@ -422,8 +468,90 @@
           },
         ],
       };
+      // قاعدة بيانات تفاصيل الصدر الجديدة
+      const chestDetailsDB = {
+        "Incline Dumbbell Chest Press": {
+          definition:
+            "تمرين ضغط بالدامبلز على بنش مائل لاستهداف الجزء العلوي من الصدر مع مدى حركي أكبر.",
+          execution:
+            "1. ارفع البنش لزاوية 30 درجة. <br> 2. انزل بالدامبلز بجانب صدرك ببطء. <br> 3. ادفع للداخل ولأعلى لزيادة الانقباض.",
+          coachNotes:
+            "لا تبالغ في زاوية البنش حتى لا ينتقل الحمل للأكتاف. حافظ على ثبات قدميك بالأرض لزيادة قوتك.",
+          Image: "/assests/Développé Incliné avec Haltères _ Comment Muscler ses Pectoraux avec le Développé Incliné avec Haltères _.gif",
+        },
+        "Incline cable Chest Press": {
+          definition:
+            "استخدام الكيبل يوفر مقاومة مستمرة على ألياف الصدر العلوية طوال المدى الحركي.",
+          execution:
+            "1. ضع البنش بين بكرات الكيبل. <br> 2. اسحب المقابض للأمام وللأعلى. <br> 3. ركز على الثبات في مرحلة الرجوع.",
+          coachNotes:
+            "السر هنا في التحكم بالوزن أثناء العودة (المدى السلبي)؛ لا تترك الكيبل يسحبك بسرعة.",
+          Image: "/assests/20 Best Cable Machine Exercises (With Workout….gif",
+        },
+        "Incline machine Chest Press": {
+          definition:
+            "تمرين ضغط على الجهاز المخصص للصدر العلوي، يوفر أماناً عالياً وعزلاً ممتازاً.",
+          execution:
+            "1. اضبط الكرسي ليكون المقبض بمستوى أعلى الصدر. <br> 2. ادفع المقابض للأمام بقوة. <br> 3. لا تقفل مفصل الكوع بالكامل عند النهاية.",
+          coachNotes:
+            "ركز على دفع المرفقين تجاه بعضهما البعض في نهاية الحركة لعصر ألياف الصدر العلوية.",
+          Image: "/assests/download.gif",
+        },
+        "Dumbbell Chest Press": {
+          definition:
+            "تمرين الصدر المستوي بالدامبلز لبناء الكتلة العضلية وتحسين التوازن العضلي.",
+          execution:
+            "1. استلقِ على بنش مستوي. <br> 2. انزل بالدامبلز حتى مستوى الصدر. <br> 3. ادفع للأعلى بقوة وثبات.",
+          coachNotes:
+            "اجعل كوعك بزاوية 45 درجة تقريباً مع جسمك؛ لا تجعله موازياً لكتفك تماماً لتجنب الإصابة.",
+          Image: "/assests/2222222.jpeg",
+        },
+        "cable Chest Press": {
+          definition:
+            "تمرين ضغط بالكيبل بوضعية الوقوف أو الجلوس لثبات الضغط على الألياف.",
+          execution:
+            "1. اسحب الكيبل من مستوى منتصف الصدر. <br> 2. ادفع للأمام مع عصر العضلة في المنتصف.",
+          coachNotes:
+            "حافظ على صدرك مرتفعاً للأعلى ولوحين الكتف مضمومين للخلف طوال فترة التمرين.",
+          video: "https://www.youtube.com/embed/WEM9FCIgucc",
+        },
 
-      // إدارة التنقل بين الصفحات
+        "machine Chest Press": {
+          definition: "جهاز ضغط الصدر المستوي لرفع أوزان ثقيلة بأمان تام.",
+          execution:
+            "1. ثبت ظهرك جيداً على مسند الجهاز. <br> 2. ادفع للأمام بتركيز عالي على انقباض الصدر.",
+          coachNotes:
+            "استخدم هذا الجهاز للوصول للفشل العضلي بأمان في نهاية جلستك.",
+          Image: "/assests/Lever Chest Press (VERSION 2) - Home Gym Review.jpeg",
+        },
+        "Dumbbell Chest Fly": {
+          definition: "تمرين تجميع بالدامبلز على بنش مستوي لعزل ألياف الصدر الوسطى وزيادة مرونة وتمدد العضلة.",
+          execution:
+            "1. استلقِ على بنش مستوي ممسكاً بالدامبلز فوق صدرك. <br> 2. انزل بالوزن للخارج والأسفل في قوس واسع مع ثنية بسيطة في المرفق. <br> 3. ارفع الأوزان مرة أخرى لنفس نقطة البداية باستخدام عضلات الصدر.",
+          coachNotes:
+            "حافظ على ثبات زاوية كوعك طوال الحركة؛ لا تحول التمرين لضغط (Press). انزل لأسفل حتى تشعر بتمدد بسيط في الصدر فقط ولا تبالغ في النزول لحماية أوتار الكتف.",
+          video: "",
+        },
+        "cable Chest Fly": {
+          definition:
+            "تمرين تجميع بالكيبل للتركيز على تمدد وعصر عضلات الصدر مع الحفاظ على ضغط مستمر.",
+          execution:
+            "1. قف في منتصف جهاز الكابل. <br> 2. امسك المقابض مع ثنية بسيطة في الكوع. <br> 3. اجمع يديك أمام صدرك مع العصر بقوة.",
+          coachNotes:
+            "لا تجعل المقابض ترجع خلف مستوى كتفك كثيراً لتجنب التمزق. ركز على عصر العضلة في المنتصف وليس فقط لمس اليدين لبعضهما.",
+          Image: "/assests/Chest + Abs » Workout Routine Created By Kuzey.gif",
+        },
+        "Machine Chest Fly": {
+          definition:
+            "تمرين عزل للصدر باستخدام الجهاز، يوفر ثباتاً عالياً ويقلل من تدخل عضلات التوازن.",
+          execution:
+            "1. اضبط الكرسي بحيث يكون المقبض بمستوى منتصف الصدر. <br> 2. اغلق الذراعين للأمام ببطء. <br> 3. ارجع ببطء شديد للاستفادة من المدى السلبي.",
+          coachNotes:
+            "تخيل أنك تحضن شجرة ضخمة؛ حافظ على قوس بسيط وثابت في مرفقك طوال الوقت.",
+          Image: "/assests/Machine Chest Fly.gif",
+        },
+        
+      };
       function showSection(id) {
         document.querySelectorAll(".page-section").forEach((s) => {
           s.style.display = "none";
@@ -434,7 +562,6 @@
         setTimeout(() => target.classList.add("active-section"), 10);
       }
 
-      // تسجيل الدخول
       function login() {
         const name = document.getElementById("username").value;
         if (name) {
@@ -448,7 +575,6 @@
         showSection("coach-intro");
       }
 
-      // تحميل العضلات بناءً على النظام
       function loadMuscles(type) {
         const system = systems[type];
         document.getElementById("split-title").innerText = system.title;
@@ -460,27 +586,25 @@
           card.className = "main-card";
           card.style.animationDelay = `${index * 0.1}s`;
           card.onclick = () => showExercises(m);
-          card.innerHTML = `<h2>${m}</h2><p>اضغط لعرض التمارين</p>`;
+          card.innerHTML = `<h2>${m}</h2><p>Click to view exercises</p>`;
           grid.appendChild(card);
         });
         showSection("muscles-selection");
       }
 
-      // عرض التمارين
       function showExercises(muscle) {
         const content = document.getElementById("details-content");
-        content.innerHTML = `<h1 style="color:var(--primary-color); text-align:center; margin-bottom:30px;">تمارين ${muscle}</h1>`;
+        content.innerHTML = `<h1 style="color:var(--primary-color); text-align:center; margin-bottom:30px;">${muscle} Exercises</h1>`;
 
         const data = exercisesDB[muscle] || [];
         data.forEach((sec, index) => {
           const subCard = document.createElement("div");
           subCard.className = "sub-card";
           subCard.style.animationDelay = `${index * 0.15}s`;
-
           let itemsHTML = sec.items
             .map(
               (i) =>
-                `<div class="exercise-item"><span>${i}</span><span>🔥</span></div>`
+                `<div class="exercise-item" onclick="openExerciseDetail('${i}')"><span>${i}</span><span>➔</span></div>`
             )
             .join("");
           subCard.innerHTML = `<h3>${sec.title}</h3>${itemsHTML}`;
@@ -489,7 +613,44 @@
         showSection("exercises-view");
       }
 
-      // التحقق من مستخدم مسجل مسبقاً
+      // الدالة الجديدة لعرض تفاصيل التمرين
+function openExerciseDetail(itemName) {
+        if (chestDetailsDB[itemName]) {
+          const info = chestDetailsDB[itemName];
+          const content = document.getElementById("exercise-info-content");
+
+          // التحقق من وجود الصورة أو وضع نص "قريباً"
+          const imageHTML = info.Image 
+            ? `<img src="${info.Image}" alt="${itemName}" style="width: 100%; height: auto; display: block;">`
+            : `<div style="padding: 40px; text-align: center; color: #666; background: #000;"> 🎥 سيتم تصوير هذا التمرين قريباً</div>`;
+
+          content.innerHTML = `
+            <h1 style="color: var(--primary-color); border-bottom: 2px solid #333; padding-bottom: 10px;">${itemName}</h1>
+            
+            <div style="margin-top: 15px;">
+              <h3 style="color: #eee;">📋 تعريف التمرين:</h3>
+              <p style="color: #ccc;">${info.definition}</p>
+            </div>
+
+            <div style="width: 100%; margin: 20px 0; border-radius: 15px; overflow: hidden; border: 1px solid #333; background: #111;">
+              ${imageHTML}
+            </div>
+
+            <div style="background: #1a1a1a; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-right: 4px solid var(--primary-color);">
+              <h3 style="color: var(--primary-color); margin-top: 0;">💡 ملاحظات الكوتش علي:</h3>
+              <p style="color: #fff; font-style: italic;">"${info.coachNotes}"</p>
+            </div>
+
+            <div style="margin-top: 15px;">
+              <h3 style="color: #eee;">🚀 طريقة الأداء:</h3>
+              <p style="color: #ccc;">${info.execution}</p>
+            </div>
+          `;
+          showSection("exercise-detail");
+        } else {
+          alert("سيتم إضافة تفاصيل هذا التمرين قريباً!");
+        }
+      }      
       window.onload = () => {
         const saved = localStorage.getItem("gym_user");
         if (saved) startApp(saved);
